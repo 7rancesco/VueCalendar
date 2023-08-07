@@ -4,6 +4,18 @@
     import CalendarLoading from './Components/CalendarLoading.vue';
     import { CalendarSchema } from './CalendarSchema';
 
+    import { onMounted } from 'vue';
+
+    interface Props {
+        calendars : string[]
+    }
+
+    const props = defineProps<Props>();
+
+    onMounted(() => {
+        CalendarSchema.calendars = props.calendars;
+    })
+
 </script>
 
 <template>

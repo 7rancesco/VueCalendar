@@ -26,7 +26,12 @@
         <div id="calendarChildContainerLeft">
             <div id="calendarHeaderLeft">
                 <div v-for="dataHeader in CalendarSchema.dateArray" class="calendarHeaderLeftComponent">
-                    {{ dataHeader }}
+                    <div class="dataTitle">{{ dataHeader }}</div>
+                    <div class="headerTitlesContainer">
+                        <div class="calendarTitle" v-for="title in CalendarSchema.calendars">
+                            {{ title }}
+                        </div>
+                    </div>
                 </div>
             </div>
             <div id="calendarInnerContainer">
@@ -34,6 +39,7 @@
                     <div class="calendarColumnInnerContainer" 
                         :style="`transform: translateY(-${timeScroll}px)`"
                     >
+                        <div v-for="calendar in CalendarSchema.calendars" class="calendarsColumn">c</div>
                     </div>
                 </div>
             </div>
@@ -82,6 +88,11 @@
         height: 100%;
         box-shadow: 0px 1px 1px black inset;
     }
+
+    .calendarHeaderLeftComponent:nth-child(even){
+        background: rgba(0, 0, 0, 0.035);
+    }
+        
     #calendarInnerContainer{
         width: v-bind('calendarChildContainerLeft_WIDTH');
         height: 90vh;
@@ -93,15 +104,20 @@
         overflow: hidden;
         box-shadow: 0px 1px 1px black inset;
     }
+
+    .calendarColumnContainer:nth-child(even){
+        background: rgba(239, 241, 244, 0.514);
+    }
+
     #calendarHeaderRight{
         width: 10vw;
         height: 10vh;
-        box-shadow: 0px 1px 1px black inset;
+        box-shadow: 0px 0px 1px black inset;
     }
     #calendarTimeScrollContainer{
         width: 10vw;
         height: 90vh;
-        box-shadow: 0px 1px 1px black inset;
+        box-shadow: 0px -1px 1px black inset;
         overflow-x: hidden;
         overflow-y: scroll;
     }
@@ -110,9 +126,46 @@
         height: 180vh;
     }
     .calendarColumnInnerContainer{
-        width: 90vw;
+        width: 100%;
         height: 180vh;
-        background: linear-gradient(gray, white);
-        box-shadow: 0px 1px 1px black inset;
+        /* background: linear-gradient(gray, white); */
+        box-shadow: 0px -1px 1px black inset;
+        display: flex;
     }
+
+    .dataTitle{
+        height: 4vh;
+        text-align: center;
+        box-shadow: 0px -1px 1px black inset;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        overflow: hidden;
+        font-size: 1vw;        
+    }
+
+    .headerTitlesContainer{
+        height: 6vh;
+        display: flex;
+        align-items: center;
+        justify-content: stretch;
+    }
+
+    .calendarTitle{
+        width: 100%;
+        height: 6vh;
+        box-shadow: 0px 0px 1px black inset;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        overflow: hidden;
+        font-size: 1vw;
+    }
+
+    .calendarsColumn{
+        width: 100%;
+        height: 100%;
+        box-shadow: 0px -1px 1px black inset;
+    }
+
 </style>
