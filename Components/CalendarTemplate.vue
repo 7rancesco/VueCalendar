@@ -1,6 +1,6 @@
 <script setup lang="ts">
 
-    import { ref } from 'vue';
+    import { ref, onMounted } from 'vue';
     import { CalendarSchema } from '../CalendarSchema';
 
 
@@ -9,13 +9,31 @@
     )+'vw';
 
 
+    onMounted(() => {
+        const timeBar = document.querySelector('#calendarTimeScrollContainer');
+        if(timeBar){
+            timeBar.scrollTop = 720;
+        }
+    })
     const timeScroll = ref<number>(0);
     const timeScroller = () => {
         const timeBar = document.querySelector('#calendarTimeScrollContainer');
-        if(timeBar?.scrollTop)
-        timeScroll.value = timeBar?.scrollTop;
-    }    
+        let s = timeBar?.scrollTop;
+        if(s)
+        timeScroll.value = s;
+    }
 
+    const newEvent = () => {
+        if(CalendarSchema.onNewEvent){
+            CalendarSchema.newEvent = {
+                datetime : 'new date',
+                calendar : 'head calendar'
+            }
+            CalendarSchema.onNewEvent();
+        } else {
+            alert('NewEvent function is not set')
+        }
+    }
 
 </script>
 
@@ -39,7 +57,10 @@
                     <div class="calendarColumnInnerContainer" 
                         :style="`transform: translateY(-${timeScroll}px)`"
                     >
-                        <div v-for="calendar in CalendarSchema.calendars" class="calendarsColumn"></div>
+                        <div v-for="calendar in CalendarSchema.calendars" class="calendarsColumn"
+                            @mousedown="newEvent()"
+                        >
+                        </div>
                     </div>
                 </div>
             </div>
@@ -51,7 +72,9 @@
             >
             </div>
             <div id="calendarTimeScrollContainer" @scroll="timeScroller">
-                <div id="calendarTimeScroll"></div>
+                <div id="calendarTimeScroll">
+                    <div v-for="i in 24" class="timeText">{{ (i - 1) < 10 ? '0' + (i - 1) :  (i - 1)}}:00</div>
+                </div>
             </div>
         </div>
 
@@ -123,29 +146,29 @@
     }
     #calendarTimeScroll{
         width: 10vw;
-        height: 180vh;
+        height: 240vh;
     }
     .calendarColumnInnerContainer{
         width: 100%;
-        height: 180vh;
+        height: 240vh;
         /* background: linear-gradient(gray, white); */
         box-shadow: 0px -1px 1px black inset;
         display: flex;
     }
 
     .dataTitle{
-        height: 4vh;
+        height: 6vh;
         text-align: center;
         box-shadow: 0px -1px 1px black inset;
         display: flex;
         justify-content: center;
         align-items: center;
         overflow: hidden;
-        font-size: 1vw;        
+        font-size: 1.2vw;        
     }
 
     .headerTitlesContainer{
-        height: 6vh;
+        height: 4vh;
         display: flex;
         align-items: center;
         justify-content: stretch;
@@ -153,7 +176,7 @@
 
     .calendarTitle{
         width: 100%;
-        height: 6vh;
+        height: 4vh;
         box-shadow: 0px 0px 1px black inset;
         display: flex;
         justify-content: center;
@@ -166,6 +189,21 @@
         width: 100%;
         height: 100%;
         box-shadow: 0px -1px 1px black inset;
+    }
+    
+    .calendarsColumn{
+        background-image: url(../SVG/Line.svg);
+        background-size: 10vh;
+    }
+
+    #calendarTimeScroll{
+        background-image: url(../SVG/Line.svg), linear-gradient(rgb(234, 223, 235), rgb(234, 223, 235));
+        background-size: 10vh;
+    }
+
+    .timeText{
+        height: 10vh;
+        font-size: 0.9vw;
     }
 
 </style>

@@ -14,6 +14,8 @@
 
     onMounted(() => {
         CalendarSchema.calendars = props.calendars;
+        if(CalendarSchema.getData)
+        CalendarSchema.getData();
     })
 
 </script>

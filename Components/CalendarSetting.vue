@@ -1,5 +1,5 @@
 <script setup lang="ts">
-    import { ref } from 'vue';
+
     import { CalendarSchema } from '../CalendarSchema';
 
 </script>
@@ -27,13 +27,14 @@
     </div>
 
     <div>
+        ZOOM
         <input 
             type="range" 
             min="1" 
             :max="CalendarSchema.maxColumns"
             v-model="CalendarSchema.columns"
         > 
-        {{ CalendarSchema.columns }}
+        {{ CalendarSchema.columns }} / {{ CalendarSchema.dateArray.length }}
 
     </div>
 
