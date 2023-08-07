@@ -23,12 +23,129 @@
         timeScroll.value = s;
     }
 
+    const isDraw = ref<boolean>(false);
+    const enableNewEvent = ref<boolean>(false);
+
+    let timer: any;
+    const activeDraw = () => {
+        if(!timer){
+            let time = 0;
+            timer = setInterval(() => {
+                time++;
+                if(time > 1){
+                    //!important
+                    deactiveDraw();//!first line code
+                    isDraw.value = true;//!second line code
+                    enableNewEvent.value = true;
+                }
+            }, 200);
+        }
+    }
+
+    const xPosition = ref<number>(0);
+    const yPosition = ref<number>(0);
+    const deactiveDraw = ( e? : MouseEvent | TouchEvent ) => {
+        isDraw.value = false;
+        clearInterval(timer);
+        timer = null;
+        if(enableNewEvent.value){
+            if(e){
+                let event : any;
+                event = e;
+                const header : any = document.querySelector('#calendarHeaderLeft');
+                const h = header?.offsetHeight;
+
+                if(event.type === 'mouseup'){
+                    xPosition.value = event.clientX;
+                    yPosition.value = event.clientY - h;
+                } else {
+                    xPosition.value = event.touches[0].clientX;
+                    yPosition.value = event.touches[0].clientY - h;
+                }
+
+                const containerX = document.querySelector('#calendarChildContainerLeft');
+                const containerY = document.querySelector('#calendarTimeScrollContainer');
+                const x = containerX?.scrollLeft;
+                const y = containerY?.scrollTop;
+
+                if(x)
+                xPosition.value+= x;
+                if(y)
+                yPosition.value+= y;
+
+            }
+            newEvent();
+            enableNewEvent.value = false;
+        }
+    }
+
+    const detectPosition = () => {
+        //Calendar
+        const containerColumn : any = document.querySelectorAll('.calendarTitle')[0];
+
+        const column_w = containerColumn?.offsetWidth;
+
+        let column = Math.floor( xPosition.value / column_w);
+
+        let ii = 0;
+        for (let i = 0; i < column; i++) {
+            ii++;
+            if(ii > CalendarSchema.calendars.length - 1){
+                ii = 0;
+            }
+        }
+        column = ii;
+
+
+        //Time
+
+        const containerY : any = document.querySelector('#calendarTimeScroll');
+
+        const y = containerY?.offsetHeight;
+
+        const hour = Math.floor(yPosition.value / (y / 24))
+
+        const prevMinutes = (yPosition.value / (y / 24)) - hour;
+        let minutes = '00';
+        if(prevMinutes <= 1){
+            minutes = '45';
+        }
+        if(prevMinutes <= 0.75){
+            minutes = '30';
+        }
+        if(prevMinutes <= 0.5){
+            minutes = '15';
+        }
+        if(prevMinutes <= 0.25){
+            minutes = '00';
+        }
+
+        //Date
+        const date_containerColumn : any = document.querySelectorAll('.dataTitle')[0];
+
+        const date_column_w = date_containerColumn?.offsetWidth;
+
+        let date_column = Math.floor( xPosition.value / date_column_w);
+
+        let date_ii = 0;
+        for (let i = 0; i < date_column; i++) {
+            date_ii++;
+            if(date_ii > CalendarSchema.dateArray.length - 1){
+                date_ii = 0;
+            }
+        }
+        date_column = date_ii;
+        
+        return {
+            datetime : CalendarSchema.dateArray[date_column]+' '+hour+':'+minutes,
+            calendar : CalendarSchema.calendars[column]
+        }
+
+    }
+
     const newEvent = () => {
         if(CalendarSchema.onNewEvent){
-            CalendarSchema.newEvent = {
-                datetime : 'new date',
-                calendar : 'head calendar'
-            }
+            CalendarSchema.newEvent = detectPosition();
             CalendarSchema.onNewEvent();
         } else {
             alert('NewEvent function is not set')
@@ -38,6 +155,11 @@
 </script>
 
 <template>
+
+
+    <div v-if="isDraw" style="position: fixed; top: 0px; left: 90vw; background: black; color: white; width: 10vw; height: 10vh; display: flex; justify-content: center; align-items: center; font-size: 1vw;">
+        New Event
+    </div>
 
     <div id="calendarContainer">
 
@@ -52,13 +174,17 @@
                     </div>
                 </div>
             </div>
-            <div id="calendarInnerContainer">
+            <div id="calendarInnerContainer"
+                @mousedown="activeDraw()"
+                @touchstart="activeDraw()"
+                @mouseup="deactiveDraw($event)"
+                @touchend="deactiveDraw($event)"
+            >
                 <div v-for="dataColumn in CalendarSchema.dateArray" class="calendarColumnContainer">
                     <div class="calendarColumnInnerContainer" 
                         :style="`transform: translateY(-${timeScroll}px)`"
                     >
                         <div v-for="calendar in CalendarSchema.calendars" class="calendarsColumn"
-                            @mousedown="newEvent()"
                         >
                         </div>
                     </div>
@@ -151,7 +277,6 @@
     .calendarColumnInnerContainer{
         width: 100%;
         height: 240vh;
-        /* background: linear-gradient(gray, white); */
         box-shadow: 0px -1px 1px black inset;
         display: flex;
     }
@@ -197,7 +322,7 @@
     }
 
     #calendarTimeScroll{
-        background-image: url(../SVG/Line.svg), linear-gradient(rgb(234, 223, 235), rgb(234, 223, 235));
+        background-image: url(../SVG/Line.svg), linear-gradient(rgb(244, 238, 243), rgb(244, 238, 243));
         background-size: 10vh;
     }
 

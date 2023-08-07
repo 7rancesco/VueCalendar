@@ -35,7 +35,7 @@ export const CalendarSchema = reactive<Calendar>({
     columns : 1,
     maxColumns: 1,
     dateArray: [
-        '26/07/1990 00:00:00',//DateNow()
+        '26/07/1990',//DateNow()
     ],
     calendars: []
 });
