@@ -39,7 +39,7 @@
                     <div class="calendarColumnInnerContainer" 
                         :style="`transform: translateY(-${timeScroll}px)`"
                     >
-                        <div v-for="calendar in CalendarSchema.calendars" class="calendarsColumn">c</div>
+                        <div v-for="calendar in CalendarSchema.calendars" class="calendarsColumn"></div>
                     </div>
                 </div>
             </div>
