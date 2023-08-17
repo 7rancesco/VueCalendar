@@ -14,8 +14,10 @@
 
     onMounted(() => {
         CalendarSchema.calendars = props.calendars;
-        if(CalendarSchema.getData)
-        CalendarSchema.getData();
+        if(CalendarSchema.getData && CalendarSchema.firstLoad){
+            CalendarSchema.getData();
+            CalendarSchema.firstLoad = false;
+        }
     })
 
 </script>

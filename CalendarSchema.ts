@@ -1,4 +1,6 @@
 import { reactive, watch } from "vue";
+import { timeToPixel } from "./lib/useTime";
+import { setPositionElements } from './lib/useCalendar';
 
 interface Data {
     datetime: string,//Date
@@ -6,7 +8,12 @@ interface Data {
     calendar: string,
     id: number,
     content: string,
-    color: string
+    color: string,
+    y1?: number,
+    y2?: number,
+    height?: number,
+    width?: number,
+    left?: number,
 }
 
 interface Calendar {
@@ -28,6 +35,7 @@ interface Calendar {
         calendar: string
     }
 
+    firstLoad: boolean
 }
 
 export const CalendarSchema = reactive<Calendar>({
@@ -35,9 +43,10 @@ export const CalendarSchema = reactive<Calendar>({
     columns : 1,
     maxColumns: 1,
     dateArray: [
-        '26/07/1990',//DateNow()
+        '1990-07-20T00:00:00',//new Date()
     ],
-    calendars: []
+    calendars: [],
+    firstLoad: true
 });
 
 const setColumns = () => {
@@ -47,19 +56,28 @@ const setColumns = () => {
     CalendarSchema.columns = dl;
 }
 
-const flush = (template : string) => {
-    CalendarSchema.template = 'Loading';
-    setTimeout(() => {
-        CalendarSchema.template = template;
-        if(CalendarSchema.getData)
-        CalendarSchema.getData();
-    }, 500);
-}
-
 watch(
     () => CalendarSchema.dateArray,
     (d) => {
         setColumns();
-        flush('Setting');
+        if(CalendarSchema.getData)
+        CalendarSchema.getData();
+    }
+)
+
+watch(
+    () => CalendarSchema.data,
+    (d) => {
+        if(CalendarSchema.data){
+            CalendarSchema.data.map( e => 
+                {
+                    e.y1 = timeToPixel(e.datetime),
+                    e.y2 = timeToPixel(e.endtime),
+                    e.height = e.y2 - e.y1
+                }
+            );
+            setPositionElements();
+            console.log(CalendarSchema.data)
+        }
     }
 )

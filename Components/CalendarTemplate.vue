@@ -2,6 +2,8 @@
 
     import { ref, onMounted } from 'vue';
     import { CalendarSchema } from '../CalendarSchema';
+    import CalendarEvent from './CalendarEvent.vue';
+    import { getDate } from '../lib/useTime';
 
 
     const calendarChildContainerLeft_WIDTH = (
@@ -15,6 +17,7 @@
             timeBar.scrollTop = 720;
         }
     })
+
     const timeScroll = ref<number>(0);
     const timeScroller = () => {
         const timeBar = document.querySelector('#calendarTimeScrollContainer');
@@ -152,6 +155,12 @@
         }
     }
 
+    const getDataEvent = (datetime : string, calendar : string) => {
+        return CalendarSchema.data?.filter(e =>
+            getDate(e.datetime) === getDate(datetime) && e.calendar === calendar
+        )
+    }
+
 </script>
 
 <template>
@@ -166,7 +175,7 @@
         <div id="calendarChildContainerLeft">
             <div id="calendarHeaderLeft">
                 <div v-for="dataHeader in CalendarSchema.dateArray" class="calendarHeaderLeftComponent">
-                    <div class="dataTitle">{{ dataHeader }}</div>
+                    <div class="dataTitle">WEEK {{ dataHeader }}</div>
                     <div class="headerTitlesContainer">
                         <div class="calendarTitle" v-for="title in CalendarSchema.calendars">
                             {{ title }}
@@ -186,6 +195,9 @@
                     >
                         <div v-for="calendar in CalendarSchema.calendars" class="calendarsColumn"
                         >
+                            <CalendarEvent v-for="event in getDataEvent(dataColumn, calendar)" 
+                                :event="event" 
+                            />
                         </div>
                     </div>
                 </div>
@@ -314,6 +326,7 @@
         width: 100%;
         height: 100%;
         box-shadow: 0px -1px 1px black inset;
+        position: relative;
     }
     
     .calendarsColumn{
@@ -322,7 +335,7 @@
     }
 
     #calendarTimeScroll{
-        background-image: url(../SVG/Line.svg), linear-gradient(rgb(244, 238, 243), rgb(244, 238, 243));
+        background-image: url(../SVG/Line.svg), linear-gradient(rgb(214 220 226), rgb(214 220 226));
         background-size: 10vh;
     }
 
