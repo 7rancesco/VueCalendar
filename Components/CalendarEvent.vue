@@ -11,6 +11,8 @@
     <div v-if="data.event" class="calendar_event" 
         :style="`top:${data.event.y1}vh; height:${data.event.height}vh; left:${data.event.left}%; width:${data.event.width}%; background: ${data.event.color};`"
         @click="CalendarSchema.onEventSelected"
+        @mousedown="CalendarSchema.eventSelected = data.event.id"
+        @touchstart="CalendarSchema.eventSelected = data.event.id"
     >
         {{ data.event.content }}
     </div> 
