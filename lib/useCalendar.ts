@@ -24,7 +24,7 @@ const setPositionElements = () => {
                 if(event.y1 && event.y2){
                     for (let pixel = event.y1; pixel < event.y2; pixel++) {
                         const p = pixelled.find(p => p.id === event.id);
-                        p?.y?.push(pixel)
+                        p?.y?.push(Math.round(pixel))
                     }
                 }
             });
@@ -47,8 +47,6 @@ const setPositionElements = () => {
                     });
                 }
             });
-
-            console.log(raggruppaSequenzaNonCongiunta(equalsId)) // [1, 2, 3, 5, 6] => [[1, 2, 3], [5, 6]]
 
             raggruppaSequenzaNonCongiunta(equalsId).forEach(element => {
                 element.forEach((el, i) => {

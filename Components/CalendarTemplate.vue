@@ -3,7 +3,8 @@
     import { ref, onMounted } from 'vue';
     import { CalendarSchema } from '../CalendarSchema';
     import CalendarEvent from './CalendarEvent.vue';
-    import { getDate } from '../lib/useTime';
+    import { getDate, setDateTimeCalendar } from '../lib/useTime';
+    import { setPositionElements } from '../lib/useCalendar';
 
 
     const calendarChildContainerLeft_WIDTH = (
@@ -16,6 +17,7 @@
         if(timeBar){
             timeBar.scrollTop = 720;
         }
+        CalendarSchema.eventSelected = undefined;
     })
 
     const timeScroll = ref<number>(0);
@@ -77,8 +79,10 @@
                 yPosition.value+= y;
 
             }
-            newEvent();
+            
             enableNewEvent.value = false;
+            newEvent();
+
         }
     }
 
@@ -140,19 +144,31 @@
         date_column = date_ii;
         
         return {
-            datetime : CalendarSchema.dateArray[date_column]+' '+hour+':'+minutes,
+            datetime : CalendarSchema.dateArray[date_column],
+            hours: hour,
+            minutes: minutes,
             calendar : CalendarSchema.calendars[column]
         }
 
     }
 
     const newEvent = () => {
-        if(CalendarSchema.onNewEvent){
-            CalendarSchema.newEvent = detectPosition();
-            CalendarSchema.onNewEvent();
+        CalendarSchema.newEvent = detectPosition();
+        if (CalendarSchema.eventSelected) {
+
+            setDateTimeCalendar();
+            CalendarSchema.eventSelected = undefined;
+            if(CalendarSchema.getData){
+                //Attiva quando la fetch è reale altrimenti ripristina evento
+                //CalendarSchema.getData();
+            }
+            setPositionElements();
+
         } else {
-            alert('NewEvent function is not set')
-        }
+            if(CalendarSchema.onNewEvent){
+                CalendarSchema.onNewEvent();
+            }
+        }        
     }
 
     const getDataEvent = (datetime : string, calendar : string) => {
@@ -167,7 +183,7 @@
 
 
     <div v-if="isDraw" style="position: fixed; top: 0px; left: 90vw; background: black; color: white; width: 10vw; height: 10vh; display: flex; justify-content: center; align-items: center; font-size: 1vw;">
-        New Event
+        Drug event
     </div>
 
     <div id="calendarContainer">

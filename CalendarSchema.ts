@@ -32,8 +32,12 @@ interface Calendar {
     onNewEvent?: Function
     newEvent?: {
         datetime: string, //Date
+        hours: number,
+        minutes: string,
         calendar: string
     }
+
+    onMoveEvent?: Function
 
     firstLoad: boolean
 }
