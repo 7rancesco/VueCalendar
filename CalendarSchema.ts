@@ -22,6 +22,7 @@ interface Calendar {
     template: string,
     dateArray: string[],
     calendars: string[],
+    calendarsSelection: string[],
     weekNames: string[],
     mounthNames: string[],
     datePickerDayNames: string[],
@@ -54,6 +55,7 @@ export const CalendarSchema = reactive<Calendar>({
         jsToDateString(new Date()),
     ],
     calendars: [],
+    calendarsSelection: [],
     firstLoad: true,
     weekNames: ['DOM', 'LUN', 'MAR', 'MER', 'GIO', 'VEN', 'SAB'],
     datePickerDayNames: ['DOM', 'LUN', 'MAR', 'MER', 'GIO', 'VEN', 'SAB'],
@@ -96,6 +98,25 @@ watch(
             );
             setPositionElements();
             console.log(CalendarSchema.data)
+        }
+    }
+)
+
+watch(
+    () => CalendarSchema.newEvent,
+    (n) => {
+        if(n){
+            if(n.datetime){
+                const date = new Date(n.datetime);
+                if(n.hours){
+                    date.setHours(n.hours)
+                }
+                if(n.minutes){
+                    date.setMinutes(parseInt(n.minutes));
+                }
+
+                n.datetime = jsToDateString(date);
+            }
         }
     }
 )

@@ -21,9 +21,11 @@
         :day-names="CalendarSchema.datePickerDayNames"
     ></VueDatePicker>
 
-    <button @click="CalendarSchema.dateArray = [jsToDateString(new Date())]">{{ CalendarSchema.datepickerNowLabel }}</button>
+    <div class="setting_spacer">
+        <button @click="CalendarSchema.dateArray = [jsToDateString(new Date())]">{{ CalendarSchema.datepickerNowLabel }}</button>
+    </div>
 
-    <div>
+    <div class="setting_spacer">
         ZOOM
         <input 
             type="range" 
@@ -35,7 +37,22 @@
 
     </div>
 
+    <div class="setting_spacer">
+        <select v-if="CalendarSchema.calendarsSelection.length" multiple v-model="CalendarSchema.calendars">
+            <option v-for="c in CalendarSchema.calendarsSelection" :value="c">{{ c }}</option>
+        </select>
+    </div>
+
 </template>
 <style scoped>
-
+    .dp__main{
+        justify-content: center;
+        margin-top: 60px;
+    }
+    .setting_spacer{
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        margin-top: 30px;
+    }
 </style>
