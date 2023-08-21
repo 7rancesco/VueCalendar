@@ -55,8 +55,17 @@ const setDateTimeCalendar = () => {
     }
 }
 
+const toTimeLabel = ( date : string ) => {
+    const d = new Date(date);
+    const weeks = CalendarSchema.weekNames;
+    const mounts = CalendarSchema.mounthNames;
+    return `${weeks[d.getDay()]} ${setNumber(d.getDate())} ${mounts[d.getMonth()]} ${d.getFullYear().toString().substring(2, 4)}`;
+}
+
 export {
     timeToPixel,
     getDate,
-    setDateTimeCalendar
+    setDateTimeCalendar,
+    jsToDateString,
+    toTimeLabel
 }

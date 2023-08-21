@@ -1,5 +1,5 @@
 import { reactive, watch } from "vue";
-import { timeToPixel } from "./lib/useTime";
+import { timeToPixel, jsToDateString } from "./lib/useTime";
 import { setPositionElements } from './lib/useCalendar';
 
 interface Data {
@@ -20,8 +20,12 @@ interface Calendar {
     columns: number,
     maxColumns: number,
     template: string,
-    dateArray: string[],//Date[]
+    dateArray: string[],
     calendars: string[],
+    weekNames: string[],
+    mounthNames: string[],
+    datePickerDayNames: string[],
+    datepickerNowLabel: string
 
     getData?: Function,
     data?: Data[],
@@ -31,7 +35,7 @@ interface Calendar {
 
     onNewEvent?: Function
     newEvent?: {
-        datetime: string, //Date
+        datetime: string,
         hours: number,
         minutes: string,
         calendar: string
@@ -47,10 +51,14 @@ export const CalendarSchema = reactive<Calendar>({
     columns : 1,
     maxColumns: 1,
     dateArray: [
-        '1990-07-20T00:00:00',//new Date()
+        jsToDateString(new Date()),
     ],
     calendars: [],
-    firstLoad: true
+    firstLoad: true,
+    weekNames: ['DOM', 'LUN', 'MAR', 'MER', 'GIO', 'VEN', 'SAB'],
+    datePickerDayNames: ['DOM', 'LUN', 'MAR', 'MER', 'GIO', 'VEN', 'SAB'],
+    mounthNames: ['GEN', 'FEB', 'MAR', 'APR', 'MAG', 'GIU', 'LUG', 'AGO', 'SET', 'OTT', 'NOV', 'DIC'],
+    datepickerNowLabel: 'Oggi'
 });
 
 const setColumns = () => {
@@ -63,6 +71,12 @@ const setColumns = () => {
 watch(
     () => CalendarSchema.dateArray,
     (d) => {
+        const newDates : string[] = [];
+        d.forEach(date => {
+            newDates.push(jsToDateString( new Date(date)))
+        });
+        CalendarSchema.dateArray = newDates;
+        CalendarSchema.dateArray.sort();
         setColumns();
         if(CalendarSchema.getData)
         CalendarSchema.getData();

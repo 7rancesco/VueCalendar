@@ -3,7 +3,7 @@
     import { ref, onMounted } from 'vue';
     import { CalendarSchema } from '../CalendarSchema';
     import CalendarEvent from './CalendarEvent.vue';
-    import { getDate, setDateTimeCalendar } from '../lib/useTime';
+    import { getDate, setDateTimeCalendar, toTimeLabel } from '../lib/useTime';
     import { setPositionElements } from '../lib/useCalendar';
 
 
@@ -191,7 +191,7 @@
         <div id="calendarChildContainerLeft">
             <div id="calendarHeaderLeft">
                 <div v-for="dataHeader in CalendarSchema.dateArray" class="calendarHeaderLeftComponent">
-                    <div class="dataTitle">WEEK {{ dataHeader }}</div>
+                    <div class="dataTitle"> {{ toTimeLabel(dataHeader) }}</div>
                     <div class="headerTitlesContainer">
                         <div class="calendarTitle" v-for="title in CalendarSchema.calendars">
                             {{ title }}
@@ -290,6 +290,13 @@
         width: 10vw;
         height: 10vh;
         box-shadow: 0px 0px 1px black inset;
+        background-image: url(../SVG/Dots.svg);
+        background-size: 10vh;
+        background-position: center;
+        background-repeat: no-repeat;
+    }
+    #calendarHeaderRight:hover{
+        cursor: pointer;
     }
     #calendarTimeScrollContainer{
         width: 10vw;
