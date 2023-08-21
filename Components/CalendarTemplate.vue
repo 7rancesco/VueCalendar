@@ -182,8 +182,8 @@
 <template>
 
 
-    <div v-if="isDraw" style="position: fixed; top: 0px; left: 90vw; background: black; color: white; width: 10vw; height: 10vh; display: flex; justify-content: center; align-items: center; font-size: 1vw;">
-        Drug event
+    <div v-if="isDraw" style="position: fixed; top: 0px; left: 90vw; background: rgb(37, 42, 47); color: white; width: 10vw; height: 10vh; display: flex; justify-content: center; align-items: center; font-size: 1vw;">
+        Dragging
     </div>
 
     <div id="calendarContainer">

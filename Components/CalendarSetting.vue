@@ -4,6 +4,7 @@
     import VueDatePicker from '@vuepic/vue-datepicker';
     import '@vuepic/vue-datepicker/dist/main.css'
     import { jsToDateString } from '../lib/useTime';
+    import { setPositionElements } from '../lib/useCalendar';
 
 </script>
 
@@ -38,7 +39,12 @@
     </div>
 
     <div class="setting_spacer">
-        <select v-if="CalendarSchema.calendarsSelection.length" multiple v-model="CalendarSchema.calendars">
+        <select 
+            v-if="CalendarSchema.calendarsSelection.length" 
+            multiple 
+            v-model="CalendarSchema.calendars"
+            @change="setPositionElements()"
+        >
             <option v-for="c in CalendarSchema.calendarsSelection" :value="c">{{ c }}</option>
         </select>
     </div>
