@@ -6,13 +6,15 @@
     import { jsToDateString } from '../lib/useTime';
     import { setPositionElements } from '../lib/useCalendar';
 
+    const emits = defineEmits(['closeCalendar']);
+
 </script>
 
 
 <template>
     
     <div>
-        <button @click="CalendarSchema.template = 'Index'">Index</button>
+        <button @click="CalendarSchema.template = 'Index'">Back</button>
     </div>
 
     <VueDatePicker 
@@ -47,6 +49,10 @@
         >
             <option v-for="c in CalendarSchema.calendarsSelection" :value="c">{{ c }}</option>
         </select>
+    </div>
+
+    <div class="setting_spacer">
+        <button @click="emits('closeCalendar')">Exit</button>
     </div>
 
 </template>

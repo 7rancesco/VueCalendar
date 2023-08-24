@@ -20,6 +20,12 @@
         }
     })
 
+    const emits = defineEmits(['closeCalendar']);
+    const closeCalendar = () => {
+        CalendarSchema.template = 'Index';
+        emits('closeCalendar');
+    }
+
 </script>
 
 <template>
@@ -31,6 +37,7 @@
 
     <CalendarSetting 
         v-if="CalendarSchema.template === 'Setting'"
+        @close-calendar="closeCalendar()"
     />
 
 
