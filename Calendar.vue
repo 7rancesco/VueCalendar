@@ -6,23 +6,23 @@
 
     import { onMounted } from 'vue';
 
-    interface Props {
-        calendars : string[]
-    }
+    // interface Props {
+    //     calendars : string[]
+    // }
 
-    const props = defineProps<Props>();
+    // const props = defineProps<Props>();
 
-    onMounted(() => {
-        CalendarSchema.calendars = props.calendars;
-        if(CalendarSchema.getData && CalendarSchema.firstLoad){
-            CalendarSchema.getData();
-            CalendarSchema.firstLoad = false;
-        }
-    })
+    // onMounted(() => {
+    //     //CalendarSchema.calendars = props.calendars;
+    //     if(CalendarSchema.getData && CalendarSchema.firstLoad){
+    //         CalendarSchema.getData();
+    //         CalendarSchema.firstLoad = false;
+    //     }
+    // })
 
     const emits = defineEmits(['closeCalendar']);
     const closeCalendar = () => {
-        CalendarSchema.template = 'Index';
+        CalendarSchema.template = "Calendar";
         emits('closeCalendar');
     }
 
@@ -31,12 +31,12 @@
 <template>
 
     <CalendarTemplate 
-        v-if="CalendarSchema.template === 'Index'"
+        v-if="CalendarSchema.template === 'Calendar'"
     />
 
 
     <CalendarSetting 
-        v-if="CalendarSchema.template === 'Setting'"
+        v-if="CalendarSchema.template === 'DatePicker'"
         @close-calendar="closeCalendar()"
     />
 

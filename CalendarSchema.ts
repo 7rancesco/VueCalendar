@@ -19,16 +19,15 @@ interface Data {
 interface Calendar {
     columns: number,
     maxColumns: number,
-    template: string,
+    template: 'Loading' | 'Calendar' | 'DatePicker'
     dateArray: string[],
     calendars: string[],
-    calendarsSelection: string[],
     weekNames: string[],
     mounthNames: string[],
     datePickerDayNames: string[],
     datepickerNowLabel: string
 
-    getData?: Function,
+    onSelectDate?: Function,
     data?: Data[],
 
     onEventSelected?: Function,
@@ -43,22 +42,18 @@ interface Calendar {
     }
 
     onMoveEvent?: Function
-
-    firstLoad: boolean
 }
 
 export const CalendarSchema = reactive<Calendar>({
-    template : 'Index',
+    template : "Calendar",
     columns : 1,
     maxColumns: 1,
     dateArray: [
         jsToDateString(new Date()),
     ],
     calendars: [],
-    calendarsSelection: [],
-    firstLoad: true,
     weekNames: ['DOM', 'LUN', 'MAR', 'MER', 'GIO', 'VEN', 'SAB'],
-    datePickerDayNames: ['DOM', 'LUN', 'MAR', 'MER', 'GIO', 'VEN', 'SAB'],
+    datePickerDayNames: ['DM', 'LN', 'MA', 'ME', 'GV', 'VN', 'SB'],
     mounthNames: ['GEN', 'FEB', 'MAR', 'APR', 'MAG', 'GIU', 'LUG', 'AGO', 'SET', 'OTT', 'NOV', 'DIC'],
     datepickerNowLabel: 'Oggi'
 });
@@ -73,15 +68,18 @@ const setColumns = () => {
 watch(
     () => CalendarSchema.dateArray,
     (d) => {
-        const newDates : string[] = [];
-        d.forEach(date => {
-            newDates.push(jsToDateString( new Date(date)))
-        });
-        CalendarSchema.dateArray = newDates;
+        // const newDates : string[] = [];
+        // d.forEach(date => {
+        //     newDates.push(jsToDateString( new Date(date)))
+        // });
+        // CalendarSchema.dateArray = newDates;
         CalendarSchema.dateArray.sort();
         setColumns();
-        if(CalendarSchema.getData)
-        CalendarSchema.getData();
+        if(CalendarSchema.onSelectDate){
+            CalendarSchema.onSelectDate();
+        } else {
+            CalendarSchema.template = "Calendar"
+        }
     }
 )
 
@@ -97,7 +95,6 @@ watch(
                 }
             );
             setPositionElements();
-            console.log(CalendarSchema.data)
         }
     }
 )

@@ -158,9 +158,9 @@
 
             setDateTimeCalendar();
             CalendarSchema.eventSelected = undefined;
-            if(CalendarSchema.getData){
+            if(CalendarSchema.onEventSelected){
                 //Attiva quando la fetch è reale altrimenti ripristina evento
-                //CalendarSchema.getData();
+                //CalendarSchema.onEventSelected();
             }
             setPositionElements();
 
@@ -222,7 +222,7 @@
 
         <div id="calendarChildContainerRight">
             <div id="calendarHeaderRight" 
-                @click="CalendarSchema.template = 'Setting'"
+                @click="CalendarSchema.template = 'DatePicker'"
             >
             </div>
             <div id="calendarTimeScrollContainer" @scroll="timeScroller">
@@ -263,7 +263,7 @@
     .calendarHeaderLeftComponent{
         width: 90vw;
         height: 100%;
-        box-shadow: 0px 1px 1px black inset;
+        box-shadow: 0px 1px 1px var(--border) inset;
     }
 
     .calendarHeaderLeftComponent:nth-child(even){
@@ -279,7 +279,7 @@
         width: 90vw;
         height: 100%;
         overflow: hidden;
-        box-shadow: 0px 1px 1px black inset;
+        box-shadow: 0px 1px 1px var(--border) inset;
     }
 
     .calendarColumnContainer:nth-child(even){
@@ -289,7 +289,7 @@
     #calendarHeaderRight{
         width: 10vw;
         height: 10vh;
-        box-shadow: 0px 0px 1px black inset;
+        box-shadow: 0px 0px 1px var(--border) inset;
         background-image: url(../SVG/Dots.svg);
         background-size: 10vh;
         background-position: center;
@@ -301,7 +301,7 @@
     #calendarTimeScrollContainer{
         width: 10vw;
         height: 90vh;
-        box-shadow: 0px -1px 1px black inset;
+        box-shadow: 0px -1px 1px var(--border) inset;
         overflow-x: hidden;
         overflow-y: scroll;
     }
@@ -319,7 +319,7 @@
     .dataTitle{
         height: 6vh;
         text-align: center;
-        box-shadow: 0px -1px 1px black inset;
+        box-shadow: 0px -1px 1px var(--border) inset;
         display: flex;
         justify-content: center;
         align-items: center;
@@ -337,7 +337,7 @@
     .calendarTitle{
         width: 100%;
         height: 4vh;
-        box-shadow: 0px 0px 1px black inset;
+        box-shadow: 0px 0px 1px var(--border) inset;
         display: flex;
         justify-content: center;
         align-items: center;
@@ -348,7 +348,7 @@
     .calendarsColumn{
         width: 100%;
         height: 100%;
-        box-shadow: 0px -1px 1px black inset;
+        box-shadow: 0px -1px 1px var(--border) inset;
         position: relative;
     }
     
@@ -358,7 +358,7 @@
     }
 
     #calendarTimeScroll{
-        background-image: url(../SVG/Line.svg), linear-gradient(rgb(214 220 226), rgb(214 220 226));
+        background-image: url(../SVG/Line.svg), linear-gradient(rgba(5, 5, 5, 0.077), rgba(5, 5, 5, 0.077));
         background-size: 10vh;
     }
 

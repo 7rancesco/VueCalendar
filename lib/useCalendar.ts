@@ -2,13 +2,15 @@ import { CalendarSchema } from "../CalendarSchema";
 import { getDate } from "./useTime";
 
 const setPositionElements = () => {
-
     const dates = CalendarSchema.dateArray;
     const calendars = CalendarSchema.calendars;
 
     dates.forEach(date => {
         calendars.forEach(calendar => {
             const events = CalendarSchema.data?.filter(e => getDate(e.datetime) === getDate(date) && e.calendar === calendar);
+            // console.log(calendar)
+            // console.log(events);
+            
             events?.map(e => e.width = 100)
             events?.map(e => e.left = 0)
 
@@ -20,24 +22,34 @@ const setPositionElements = () => {
 
             const pixelled : Pixelled[] = [];
             events?.forEach(event => {
+                // console.log(event);
+                
                 pixelled.push({id: event.id, y : []});
                 if(event.y1 && event.y2){
                     for (let pixel = event.y1; pixel < event.y2; pixel++) {
                         const p = pixelled.find(p => p.id === event.id);
                         p?.y?.push(Math.round(pixel))
+                        // console.log(Math.round(pixel));
                     }
                 }
             });
 
             const equalsId : number[] = [];
             pixelled.forEach((pix, i) => {
+                // console.log(pix)
                 if(pixelled[i + 1]){
                     pix.y?.forEach(y => {
+                        // console.log(y);
+                        
                         const foundY = pixelled[i+1].y?.find(py => py == y);
+                        // console.log(foundY);
+                        
                         if(foundY){
 
                             if(!equalsId.find(e => e === pix.id)){
                                 equalsId.push(pix.id)
+                                console.log(pix.id);
+                                
                             }
                             if(!equalsId.find(e => e === pixelled[i + 1].id)){
                                 equalsId.push(pixelled[i + 1].id)
@@ -49,18 +61,22 @@ const setPositionElements = () => {
             });
 
             raggruppaSequenzaNonCongiunta(equalsId).forEach(element => {
+                // console.log({element: element})
+
                 element.forEach((el, i) => {
+                    // console.log({el: el})                    
                     const event = CalendarSchema.data?.find(e => e.id === el);
                     if(event){
                         event.width = 100 / element.length;
                         event.left = 100 / element.length * i;
+                        // console.log({id: el,length: element.length,i: i,w: 100 / element.length,l: 100 / element.length * i});
                     }
                 });
             });
 
         });
     });
-    
+
 }
 
     function raggruppaSequenzaNonCongiunta(array : number[]) {
