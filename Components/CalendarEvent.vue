@@ -33,13 +33,14 @@
     .calendar_event{
         position: absolute;
         overflow: hidden;
-        box-shadow: 0px 0px 0px 0.5px white inset;
+        box-shadow: 0px 0px 0px 0.5px var(--color) inset;
         font-size: 1vw;
         display: flex;
         justify-content: center;
         align-items: center;
         border-radius: 3px;
         user-select: none;
+        color: black;
     }
 
 </style>

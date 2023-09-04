@@ -267,7 +267,7 @@
     }
 
     .calendarHeaderLeftComponent:nth-child(even){
-        background: rgba(0, 0, 0, 0.035);
+        background: rgba(143, 143, 143, 0.089);
     }
         
     #calendarInnerContainer{
@@ -283,7 +283,7 @@
     }
 
     .calendarColumnContainer:nth-child(even){
-        background: rgba(239, 241, 244, 0.514);
+        background: rgba(143, 143, 143, 0.089);
     }
 
     #calendarHeaderRight{
@@ -312,7 +312,7 @@
     .calendarColumnInnerContainer{
         width: 100%;
         height: 240vh;
-        box-shadow: 0px -1px 1px black inset;
+        box-shadow: 0px -1px 1px var(--color) inset;
         display: flex;
     }
 
