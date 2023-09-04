@@ -2,20 +2,6 @@ import { reactive, watch } from "vue";
 import { timeToPixel, jsToDateString } from "./lib/useTime";
 import { setPositionElements } from './lib/useCalendar';
 
-interface Data {
-    datetime: string,//Date
-    endtime: string,
-    calendar: string,
-    id: number,
-    content: string,
-    color: string,
-    y1?: number,
-    y2?: number,
-    height?: number,
-    width?: number,
-    left?: number,
-}
-
 interface Calendar {
     columns: number,
     maxColumns: number,
@@ -28,7 +14,7 @@ interface Calendar {
     datepickerNowLabel: string
 
     onSelectDate?: Function,
-    data?: Data[],
+    data?: setData[],
 
     onEventSelected?: Function,
     eventSelected?: number
@@ -68,11 +54,6 @@ const setColumns = () => {
 watch(
     () => CalendarSchema.dateArray,
     (d) => {
-        // const newDates : string[] = [];
-        // d.forEach(date => {
-        //     newDates.push(jsToDateString( new Date(date)))
-        // });
-        // CalendarSchema.dateArray = newDates;
         CalendarSchema.dateArray.sort();
         setColumns();
         if(CalendarSchema.onSelectDate){

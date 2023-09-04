@@ -8,69 +8,22 @@ const setPositionElements = () => {
     dates.forEach(date => {
         calendars.forEach(calendar => {
             const events = CalendarSchema.data?.filter(e => getDate(e.datetime) === getDate(date) && e.calendar === calendar);
-            // console.log(calendar)
-            // console.log(events);
-            
-            events?.map(e => e.width = 100)
-            events?.map(e => e.left = 0)
-
-
-            interface Pixelled {
-                id: number,
-                y?: number[],
-            }
-
-            const pixelled : Pixelled[] = [];
+            const sameEventsArray : setData[][] = [];
             events?.forEach(event => {
-                // console.log(event);
-                
-                pixelled.push({id: event.id, y : []});
-                if(event.y1 && event.y2){
-                    for (let pixel = event.y1; pixel < event.y2; pixel++) {
-                        const p = pixelled.find(p => p.id === event.id);
-                        p?.y?.push(Math.round(pixel))
-                        // console.log(Math.round(pixel));
-                    }
+                const y1 = event.y1
+                const y2 = event.y2
+                if(y1 && y2){
+                    const same_Events = events.filter(e => e.y1 === y1 || y1 < (e.y2 ? e.y2 : 0) && y2 > (e.y1 ? e.y1 : 100000) );
+                    same_Events.sort((a, b) => ((a.height ? a.height : 0) > (b.height ? b.height : 0)) ? 1 : -1).reverse()
+                    sameEventsArray.push(same_Events)
                 }
-            });
+            });  
 
-            const equalsId : number[] = [];
-            pixelled.forEach((pix, i) => {
-                // console.log(pix)
-                if(pixelled[i + 1]){
-                    pix.y?.forEach(y => {
-                        // console.log(y);
-                        
-                        const foundY = pixelled[i+1].y?.find(py => py == y);
-                        // console.log(foundY);
-                        
-                        if(foundY){
-
-                            if(!equalsId.find(e => e === pix.id)){
-                                equalsId.push(pix.id)
-                                console.log(pix.id);
-                                
-                            }
-                            if(!equalsId.find(e => e === pixelled[i + 1].id)){
-                                equalsId.push(pixelled[i + 1].id)
-                            }
-
-                        }
-                    });
-                }
-            });
-
-            raggruppaSequenzaNonCongiunta(equalsId).forEach(element => {
-                // console.log({element: element})
-
-                element.forEach((el, i) => {
-                    // console.log({el: el})                    
-                    const event = CalendarSchema.data?.find(e => e.id === el);
-                    if(event){
-                        event.width = 100 / element.length;
-                        event.left = 100 / element.length * i;
-                        // console.log({id: el,length: element.length,i: i,w: 100 / element.length,l: 100 / element.length * i});
-                    }
+            sameEventsArray.sort((a, b) => (a.length > b.length) ? 1 : -1);
+            sameEventsArray.forEach(element => {
+                element.forEach((e, i) => {
+                    e.width = 100 / element.length
+                    e.left = (100 / element.length) * i
                 });
             });
 
@@ -78,22 +31,6 @@ const setPositionElements = () => {
     });
 
 }
-
-    function raggruppaSequenzaNonCongiunta(array : number[]) {
-        const result = [];
-        let currentGroup = [array[0]];
-    
-        for (let i = 1; i < array.length; i++) {
-        if (array[i] - array[i - 1] !== 1) {
-            result.push(currentGroup);
-            currentGroup = [];
-        }
-        currentGroup.push(array[i]);
-        }
-    
-        result.push(currentGroup);
-        return result;
-    }
 
 
 export {

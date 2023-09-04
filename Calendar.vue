@@ -4,22 +4,6 @@
     import CalendarLoading from './Components/CalendarLoading.vue';
     import { CalendarSchema } from './CalendarSchema';
 
-    import { onMounted } from 'vue';
-
-    // interface Props {
-    //     calendars : string[]
-    // }
-
-    // const props = defineProps<Props>();
-
-    // onMounted(() => {
-    //     //CalendarSchema.calendars = props.calendars;
-    //     if(CalendarSchema.getData && CalendarSchema.firstLoad){
-    //         CalendarSchema.getData();
-    //         CalendarSchema.firstLoad = false;
-    //     }
-    // })
-
     const emits = defineEmits(['closeCalendar']);
     const closeCalendar = () => {
         CalendarSchema.template = "Calendar";
